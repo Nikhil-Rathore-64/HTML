@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Calendar</title>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  button {
+    margin-bottom: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 300px;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #3498db;
+    color: #fff;
+  }
+  
+  td {
+    cursor: pointer;
+  }
+  
+  td.selected {
+    background-color: #3498db;
+    color: #fff;
+  }
+  
+  select {
+    padding: 5px;
+    font-size: 14px;
+  }
+  
+  </style>
+</head>
+<body>
+
+  <label for="months">Select Month:</label>
+  <select id="months" onchange="changeMonth()">
+    <option value="0">January</option>
+    <option value="1">February</option>
+    <option value="2">March</option>
+    <option value="3">April</option>
+    <option value="4">May</option>
+    <option value="5">June</option>
+    <option value="6">July</option>
+    <option value="7">August</option>
+    <option value="8">September</option>
+    <option value="9">October</option>
+    <option value="10">November</option>
+    <option value="11">December</option>
+  </select>
+
+  <table id="calendar">
+    <thead>
+      <tr>
+        <th>Sun</th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Calendar content will be generated here -->
+    </tbody>
+  </table>
+
+  <script>
+    let selectedDate;
+
+function changeMonth() {
+  const selectedMonth = document.getElementById("months").value;
+  const calendarBody = document.querySelector("#calendar tbody");
+  calendarBody.innerHTML = ""; // Clear existing content
+
+  const firstDayOfMonth = new Date(new Date().getFullYear(), selectedMonth, 1).getDay();
+  const daysInMonth = new Date(new Date().getFullYear(), parseInt(selectedMonth) + 1, 0).getDate();
+
+  let date = 1;
+  for (let i = 0; i < 6; i++) {
+    const row = calendarBody.insertRow(i);
+
+    for (let j = 0; j < 7; j++) {
+      const cell = row.insertCell(j);
+
+      if (i === 0 && j < firstDayOfMonth) {
+        // Empty cells for previous month
+        cell.innerHTML = "";
+      } else if (date > daysInMonth) {
+        // No more days to display
+        break;
+      } else {
+        cell.innerHTML = date;
+        cell.addEventListener("click", () => selectDate(cell));
+        date++;
+      }
+    }
+  }
+}
+
+function selectDate(cell) {
+  if (selectedDate) {
+    selectedDate.classList.remove("selected");
+  }
+  selectedDate = cell;
+  selectedDate.classList.add("selected");
+}
+
+// Initialize calendar on page load
+changeMonth();
+
+  </script>
+</body>
+</html>
